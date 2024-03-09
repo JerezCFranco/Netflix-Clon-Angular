@@ -1,0 +1,176 @@
+<nav [ngClass]="modoNocturnoActivo ? 'navbar navbar-dark navbar-expand-lg' : 'navbar navbar-expand-lg bg-body-tertiary'"
+    [attr.data-bs-theme]="modoNocturnoActivo ? 'dark' : 'white'">
+    <div class="container-fluid">
+        <button class="navbar-toggler" type="button" (click)="toggleNavbar()" data-bs-toggle="collapse" data-bs-target="#navbarTogglerDemo03"
+            aria-controls="navbarTogglerDemo03" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <img class="logo" style="align-items:baseline;" src="../../assets/img/netflix.png" alt="">
+        <a class="navbar-brand"></a>
+        <div class="collapse navbar-collapse" id="navbarTogglerDemo03" [ngClass]="{ 'show': navbarExpanded }">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" style="margin-right: 5px;" role="button" data-bs-toggle="dropdown" data-bs-theme="dark"
+                        aria-expanded="false">
+                        Películas
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li class="dropdown-item" (click)="onPopularMovieClick()">Populares</li>
+                        <li>
+                            <hr class="dropdown-divider">
+                        </li>
+                        <li class="dropdown-item" (click)="onRatedMovieClick()">Mejor Votadas</li>
+                    </ul>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        Shows de Tv
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li class="dropdown-item" (click)="onPopularTvClick()">Populares</li>
+                        <li>
+                            <hr class="dropdown-divider">
+                        </li>
+                        <li class="dropdown-item" (click)="onRatedTvClick()">Mejor Votadas</li>
+                    </ul>
+                </li>
+                <label class="switch">
+                    <input id="checkbox" type="checkbox" (click)="toggleModoNocturno()" [checked]="modoNocturnoActivo">
+                    <span class="slider round">
+                        <span class="icon-modo-nocturno">
+                            <i class="fas fa-moon"></i>
+                        </span>
+                        <span class="icon-modo-diurno">
+                            <i class="fas fa-sun"></i>
+                        </span>
+                    </span>
+                </label>
+            </ul>
+            <div class="buscador-barra" style="margin-right: 100px;">
+                <input type="text" [(ngModel)]="searchInput" id="searchInput" placeholder="Buscar">
+                <button [ngClass]="modoNocturnoActivo ? 'lupa-dark' :'lupa-white' " (click)="onSearchAllClick()"><i
+                        class="fa-solid fa-magnifying-glass"></i></button>
+            </div>
+            <div class="ml-auto">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0 ">
+                    <li class="buscador-usuario" style="margin-right: 20px;">
+                        <p>Bienvenido &nbsp;</p>
+                        <p [ngClass]="modoNocturnoActivo ? 'google-nombre-black' : 'google-nombre-white'">Invitado
+                        </p>
+                        <img [ngClass]="{ 'usuario-img-black': modoNocturnoActivo }" src="../../assets/img/usuario-invitado.png" alt="nombre">
+                    </li>
+                    <!-- <li class="buscador-usuario">
+                        <button class="desconectarse-btn">Desconectarse</button>
+                    </li> -->
+                </ul>
+            </div>
+        </div>
+    </div>
+</nav>
+<div class="scroll-container" [style.margin-top.px]="navbarExpanded ? 350 : 90">
+    <div *ngIf="resultsPopular.length > 0">
+        <div [ngClass]="modoNocturnoActivo ? 'genero-dark' : 'genero-white' " *ngIf="movieSelector == '1'">
+            <h5>PELÍCULAS MÁS POPULARES</h5>
+        </div>
+        <div [ngClass]="modoNocturnoActivo ? 'genero-dark' : 'genero-white' " *ngIf="movieSelector == '2'">
+            <h5>PELÍCULAS MEJOR VALORADAS</h5>
+        </div>
+        <div class="scrollable-container">
+            <div class="scroll-arrow left-arrow" (click)="scrollLeft()">
+                <i class="fa-solid fa-left-long"></i>
+            </div>
+            <div *ngFor="let movies of resultsPopular">
+                <div class="popularMovie">
+                    <div class="poster-container">
+                        <img *ngIf="movies.poster_path" [src]="'https://image.tmdb.org/t/p/w200' + movies.poster_path"
+                            alt="Movie Poster">
+                        <div class="overlay">
+                            <h2>{{ movies.title }}</h2>
+                            <p>Lanzamiento: {{ movies.release_date ? movies.release_date : 'No Disponible'}}</p>
+                            <p>{{ movies.overview ? movies.overview : 'No Disponible'}}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="scroll-arrow right-arrow" (click)="scrollRight()">
+                <i class="fa-solid fa-right-long"></i>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="scroll-container">
+    <div *ngIf="resultsTvPopular.length > 0">
+        <div [ngClass]="modoNocturnoActivo ? 'genero-dark' : 'genero-white' " *ngIf="tvSelector == '1'">
+            <h5>SHOWS MÁS POPULARES</h5>
+        </div>
+        <div [ngClass]="modoNocturnoActivo ? 'genero-dark' : 'genero-white' " *ngIf="tvSelector == '2'">
+            <h5>SHOWS MEJOR VALORADOS </h5>
+        </div>
+        <div class="scrollable-container-tv">
+            <div class="scroll-arrow left-arrow" (click)="scrollLeftTv()">
+                <i class="fa-solid fa-left-long"></i>
+            </div>
+            <div *ngFor="let movies of resultsTvPopular">
+                <div class="popularMovie">
+                    <div class="poster-container">
+                        <img *ngIf="movies.poster_path" [src]="'https://image.tmdb.org/t/p/w200' + movies.poster_path"
+                            alt="Movie Poster">
+                        <div class="overlay">
+                            <h2>{{ movies.name }}</h2>
+                            <p>Lanzamiento: {{ movies.first_air_date ? movies.first_air_date : 'No Disponible'}}</p>
+                            <p>{{ movies.overview ? movies.overview : 'No Disponible'}}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="scroll-arrow right-arrow" (click)="scrollRightTv()">
+                <i class="fa-solid fa-right-long"></i>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div *ngIf="results.length > 0">
+    <div *ngFor="let movie of results">
+        <div *ngIf="movie.overview.length > 100 && movie.poster_path"
+            [ngClass]="modoNocturnoActivo ? 'movie movie-black' : 'movie movie-white'">
+            <div class="movie-info">
+                <h2>{{ movie.title }} (Película)</h2>
+                <p>Lanzamiento: {{ movie.release_date ? movie.release_date : 'No Disponible'}}</p>
+                <p>
+                    <ng-container *ngIf="movie.overview && movie.overview.length > 440">
+                        {{ movie.overview.slice(0, 440) + '...' }}
+                    </ng-container>
+                    <ng-container *ngIf="movie.overview && movie.overview.length <= 440">
+                        {{ movie.overview }}
+                    </ng-container>
+                </p>
+            </div>
+            <img *ngIf="movie.poster_path" [src]="'https://image.tmdb.org/t/p/w200' + movie.poster_path"
+                alt="Movie Poster">
+        </div>
+    </div>
+</div>
+
+<div *ngIf="resultsTv.length > 0">
+    <div *ngFor="let show of resultsTv">
+        <div *ngIf="show.overview.length > 100 && show.poster_path"
+            [ngClass]="modoNocturnoActivo ? 'movie movie-black' : 'movie movie-white'">
+            <div class="movie-info">
+                <h2>{{ show.name }} (Serie)</h2>
+                <p>Lanzamiento: {{ show.first_air_date ? show.first_air_date : 'No Disponible'}}</p>
+                <p>
+                    <ng-container *ngIf="show.overview && show.overview.length > 440">
+                        {{ show.overview.slice(0, 440) + '...' }}
+                    </ng-container>
+                    <ng-container *ngIf="show.overview && show.overview.length <= 440">
+                        {{ show.overview }}
+                    </ng-container>
+                </p>
+            </div>
+            <img *ngIf="show.poster_path" [src]="'https://image.tmdb.org/t/p/w200' + show.poster_path"
+                alt="Movie Poster">
+        </div>
+    </div>
+</div>
