@@ -4,7 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { RouterOutlet } from '@angular/router';
 import { MovieSearchService } from '../services/movie-search.service';
 import { Title } from '@angular/platform-browser';
-import { AuthService } from '../services/auth.service';
+// import { AuthService } from '../services/auth.service';
 
 @Component({
   selector: 'app-browser',
@@ -57,6 +57,8 @@ export class BrowserComponent implements OnInit {
   ngOnInit(): void {
     this.toggleModoNocturno();
     this.titleService.setTitle('Netflix Clon');
+    this.onRatedMovieClick();
+    this.onRatedTvClick();
   }
 
   // singOut() {
@@ -134,77 +136,70 @@ export class BrowserComponent implements OnInit {
       console.error('Error al obtener películas populares:', error);
     }
   }
-
-
   scrollLeft() {
     const scrollableContainer = document.querySelector('.scrollable-container');
     if (scrollableContainer) {
       let currentPosition = scrollableContainer.scrollLeft;
-      const targetPosition = currentPosition - 200; // Desplazamiento hacia la izquierda
+      const targetPosition = currentPosition - 200;
 
       const scrollStep = () => {
         if (currentPosition > targetPosition) {
-          currentPosition -= 10; // Ajusta la velocidad de desplazamiento cambiando este valor
+          currentPosition -= 10;
           scrollableContainer.scrollLeft = currentPosition;
-          setTimeout(scrollStep, 10); // Ajusta el tiempo de espera para cada paso
+          setTimeout(scrollStep, 10);
         }
       };
 
       scrollStep();
     }
   }
-
   scrollLeftTv() {
     const scrollableContainerTv = document.querySelector('.scrollable-container-tv');
     if (scrollableContainerTv) {
       let currentPosition = scrollableContainerTv.scrollLeft;
-      const targetPosition = currentPosition - 200; // Desplazamiento hacia la izquierda
+      const targetPosition = currentPosition - 200;
 
       const scrollStep = () => {
         if (currentPosition > targetPosition) {
-          currentPosition -= 10; // Ajusta la velocidad de desplazamiento cambiando este valor
+          currentPosition -= 10;
           scrollableContainerTv.scrollLeft = currentPosition;
-          setTimeout(scrollStep, 10); // Ajusta el tiempo de espera para cada paso
+          setTimeout(scrollStep, 10);
         }
       };
 
       scrollStep();
     }
   }
-
   scrollRight() {
     const scrollableContainer = document.querySelector('.scrollable-container');
     if (scrollableContainer) {
       let currentPosition = scrollableContainer.scrollLeft;
-      const targetPosition = currentPosition + 200; // Desplazamiento hacia la derecha
+      const targetPosition = currentPosition + 200;
 
       const scrollStep = () => {
         if (currentPosition < targetPosition) {
-          currentPosition += 10; // Ajusta la velocidad de desplazamiento cambiando este valor
+          currentPosition += 10;
           scrollableContainer.scrollLeft = currentPosition;
-          setTimeout(scrollStep, 10); // Ajusta el tiempo de espera para cada paso
+          setTimeout(scrollStep, 10);
         }
       };
 
       scrollStep();
     }
   }
-
-
   scrollRightTv() {
     const scrollableContainerTv = document.querySelector('.scrollable-container-tv');
     if (scrollableContainerTv) {
       let currentPosition = scrollableContainerTv.scrollLeft;
-      const targetPosition = currentPosition + 200; // Desplazamiento hacia la derecha
+      const targetPosition = currentPosition + 200;
 
       const scrollStep = () => {
         if (currentPosition < targetPosition) {
-          currentPosition += 10; // Ajusta la velocidad de desplazamiento cambiando este valor
+          currentPosition += 10;
           scrollableContainerTv.scrollLeft = currentPosition;
-          setTimeout(scrollStep, 10); // Ajusta el tiempo de espera para cada paso
+          setTimeout(scrollStep, 10); 
         }
       };
-
       scrollStep();
     }
   }
